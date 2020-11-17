@@ -23,9 +23,6 @@
     <div class="countdown">
         <p class="count_number">10</p>
     </div>
-    <div class="timeup">
-        <img src="loading.gif" width="50" height="50"></img><span id="minutes"></span>:<span id="seconds"></span>
-    </div>
     <div class="record">
         <a class="btn btn-success" href="test_done.html">Next</a>
     </div>
@@ -96,7 +93,6 @@
             if (count == 0) {
                 $(".count_number").text("Ready!");    
                 clearInterval(interval);
-                startRecord();
                 $(".record a").show();
             }
             else {
