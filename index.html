@@ -1,60 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Display Webcam Stream</title>
- 
-<style>
-#container {
-	margin: 0px auto;
-	width: 500px;
-	height: 375px;
-	border: 10px #333 solid;
-}
-#videoElement {
-	width: 500px;
-	height: 375px;
-	background-color: #666;
-}
-</style>
+    <title>Interview application</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link rel="stylesheet" href="style.css" />
 </head>
- 
 <body>
-<div id="container">
-	<video autoplay="true" id="videoElement">
-	
-	</video>
-	<button onclick="stop(event)">Stop</button>
-	<button onclick="start()">Start</button>
-</div>
-<script>
-	
-	var video = document.querySelector("#videoElement");
-	function start() {
+  
+<section class="header">
+    <div class="back">
+        <button type="button" class="btn"><i class='fas fa-arrow-left'></i></button>
+    </div>
+    <div class="message">
+        <p class="greeting">Welcome</p>
+        <p class="notice">please fill out the information below and click start interview</p>
+    </div>
+    <div class="logo">
+        <p >Logo</p>
+    </div>
+</section>
 
-		if (navigator.mediaDevices.getUserMedia) {
-		  navigator.mediaDevices.getUserMedia({ video: true })
-		    .then(function (stream) {
-		      video.srcObject = stream;
-		    })
-		    .catch(function (err0r) {
-		      console.log("Something went wrong!");
-		    });
-		}
-	}
+<main>
+    <div class="container">
+        <form class="form-horizontal" action="/action_page.php">
+            <div class="form-group">
+                <input type="text" class="form-control form-control-lg" id="name" placeholder="Full name" name="name">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control form-control-lg" id="age" placeholder="Age" name="age">
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" name="email">
+            </div>
+            <div class="form-group">
+                <input type="tel" class="form-control form-control-lg" id="phone" placeholder="Phone" name="phone">
+            </div>
+            <div class="camera_container">
+                <div id="my_camera"></div>
+                <p class="snap" onclick="take_snapshot()" data-val="">Take<br>Picture</p>
+            </div>
+            <input type="hidden" name="image" class="image-tag">
+            
+            <div class="form-group text-center">
+                <a type="button" class="btn interview" href="interview.html">Start interview</a>
+            </div>
+        </form>
+    </div>
+</main>
 
+  
+<!-- Configure a few settings and attach camera -->
+<script language="JavaScript">
+    Webcam.set({
+        width: 150,
+		height: 150,
+		dest_width: 640,
+		dest_height: 480,
+		image_format: 'jpeg',
+		jpeg_quality: 90,
+    });
+  
+    Webcam.attach( '#my_camera' );
+    var shutter = new Audio();
+    shutter.autoplay = true;
+    function take_snapshot() {
+        var take = $(".snap").data('val');
+        if (take === "take")
+        {
+            shutter.src = 'shutter.mp3';
+            Webcam.snap( function(data_uri) {
+                $(".image-tag").val(data_uri);
+            });
+            Webcam.freeze();
 
-	function stop(e) {
-	  var stream = video.srcObject;
-	  var tracks = stream.getTracks();
+            $(".snap").data('val', "retake");
+            $(".snap").html('Back To <br> Camera');
 
-	  for (var i = 0; i < tracks.length; i++) {
-	    var track = tracks[i];
-	    track.stop();
-	  }
+        }
 
-	  video.srcObject = null;
-	}
+        else if (take === "retake") {
+            Webcam.unfreeze();
+            $(".image-tag").val('')
+            $(".snap").html('Take <br> Picture');
+            $(".snap").data('val', "take");
+        }
+    }
+    
+    Webcam.on( 'error', function(err) {
+        shutter.src = 'error.mp3';            
+        shutter.play();
+        $(".snap").data('val', "error");
+    });
+    Webcam.on( 'load', function(err) {
+        $(".snap").data('val', "take");
+    });
 </script>
+ 
 </body>
 </html>
