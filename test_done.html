@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
   
@@ -41,7 +41,7 @@
     </div>
     
     <div class="back_image">
-        <img src="1.jpg" width="100%" height="100%"></img>
+        <img src="./images/1.jpg" width="100%" height="100%"></img>
     </div>
 </main>
 
@@ -64,7 +64,7 @@
         var take = $(".snap").data('val');
         if (take === "take")
         {
-            shutter.src = 'shutter.mp3';
+            shutter.src = './sounds/shutter.mp3';
             Webcam.snap( function(data_uri) {
                 $(".image-tag").val(data_uri);
             });
@@ -84,7 +84,7 @@
     }
     
     Webcam.on( 'error', function(err) {
-        shutter.src = 'error.mp3';            
+        shutter.src = './sounds/error.mp3';            
         shutter.play();
         $(".snap").data('val', "error");
     });
